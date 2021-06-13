@@ -40,8 +40,6 @@ RUN pecl install -o -f redis \
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install simplexml
 
-COPY custom.ini /usr/local/etc/php/conf.d/custom.ini
-
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
