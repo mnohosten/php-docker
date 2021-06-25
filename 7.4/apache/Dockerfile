@@ -57,6 +57,7 @@ RUN crontab /etc/cron.d/app-cron
 RUN touch /var/log/cron.log
 
 COPY ./7.4/apache/start-script /usr/local/bin/
+RUN chmod 0644 /usr/local/bin/start-script
 WORKDIR /var/www
 
 CMD ["start-script"]
