@@ -40,6 +40,11 @@ RUN pecl install -o -f redis \
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install simplexml
 
+# Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
+RUN composer self-update --2
+
 ## Crontab
 RUN apt-get update && apt-get -y install cron
 # Copy hello-cron file to the cron.d directory
@@ -50,10 +55,8 @@ RUN chmod 0644 /etc/cron.d/app-cron
 RUN crontab /etc/cron.d/app-cron
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
-# Run the command on container startup
-CMD cron && tail -f /var/log/cron.log
 
-# Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
-RUN composer self-update --2
+COPY ./7.4/apache/start-script /usr/local/bin/
+WORKDIR /var/www
+
+CMD ["start-script"]
