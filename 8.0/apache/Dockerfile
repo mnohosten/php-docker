@@ -43,7 +43,7 @@ RUN docker-php-ext-install simplexml
 ## Crontab
 RUN apt-get update && apt-get -y install cron
 # Copy hello-cron file to the cron.d directory
-COPY app-cron /etc/cron.d/app-cron
+COPY ./app-cron /etc/cron.d/app-cron
 # Give execution rights on the cron job
 RUN chmod 0644 /etc/cron.d/app-cron
 # Apply cron job
