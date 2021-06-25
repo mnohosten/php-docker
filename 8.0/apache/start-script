@@ -2,4 +2,5 @@
 set -e
 
 cron
+crontab /etc/cron.d/app-cron
 apache2-foreground
