@@ -39,6 +39,7 @@ RUN pecl install -o -f redis \
     &&  docker-php-ext-enable redis
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install simplexml
+RUN docker-php-ext-install http
 
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

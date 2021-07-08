@@ -39,6 +39,7 @@ RUN pecl install -o -f redis \
     &&  docker-php-ext-enable redis
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install simplexml
+RUN docker-php-ext-install http
 
 ## Crontab
 RUN apt-get update && apt-get -y install cron
