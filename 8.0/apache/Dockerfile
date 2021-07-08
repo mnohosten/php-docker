@@ -39,7 +39,9 @@ RUN pecl install -o -f redis \
     &&  docker-php-ext-enable redis
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install simplexml
-RUN docker-php-ext-install http
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions http
 
 ## Crontab
 RUN apt-get update && apt-get -y install cron
