@@ -68,6 +68,6 @@ ENV APACHE_RUN_GROUP www-data
 
 RUN apt-get install -y supervisor
 RUN mkdir -p /var/log/supervisor
-COPY ./supervisord.conf /etc/supervisor/supervisord.conf
-COPY ./supervisor/conf.d /etc/supervisor/conf.d
+COPY ./7.4/apache/supervisord.conf /etc/supervisor/supervisord.conf
+COPY ./7.4/apache/supervisor/conf.d /etc/supervisor/conf.d
 CMD ["/usr/bin/supervisord"]
