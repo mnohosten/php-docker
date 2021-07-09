@@ -63,4 +63,11 @@ COPY ./7.4/apache/start-script /usr/local/bin/
 RUN chmod 0777 /usr/local/bin/start-script
 WORKDIR /var/www
 
-CMD ["bash", "/usr/local/bin/start-script"]
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+
+RUN apt-get install -y supervisor
+RUN mkdir -p /var/log/supervisor
+COPY ./supervisord.conf /etc/supervisor/supervisord.conf
+COPY ./supervisor/conf.d /etc/supervisor/conf.d
+CMD ["/usr/bin/supervisord"]
