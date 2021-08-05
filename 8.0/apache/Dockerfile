@@ -72,6 +72,14 @@ RUN crontab /etc/cron.d/app-cron
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
 
+RUN git clone https://github.com/wasmerio/wasmer-php && \
+    cd wasmer-php/ext && \
+    phpize && \
+    ./configure --enable-wasmer && \
+    make && \
+    make install && \
+    docker-php-ext-enable wasm
+
 COPY ./8.0/apache/start-script /usr/local/bin/
 RUN chmod 0777 /usr/local/bin/start-script
 WORKDIR /var/www
