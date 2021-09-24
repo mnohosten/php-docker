@@ -42,6 +42,7 @@ RUN docker-php-ext-install simplexml
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
     install-php-extensions http
+RUN docker-php-ext-install opcache
 
 ## Crontab
 RUN apt-get update && apt-get -y install cron
@@ -72,15 +73,10 @@ RUN crontab /etc/cron.d/app-cron
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
 
-RUN mkdir /php-wasm && \
-    cd /php-wasm && \
-    git clone https://github.com/wasmerio/wasmer-php && \
-    cd wasmer-php/ext && \
-    phpize && \
-    ./configure --enable-wasmer && \
-    make && \
-    make install && \
-    docker-php-ext-enable wasm
+
+RUN apt-get install -y wget
+RUN wget https://get.symfony.com/cli/installer -O - | bash
+RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
 COPY ./8.0/apache/start-script /usr/local/bin/
 RUN chmod 0777 /usr/local/bin/start-script
