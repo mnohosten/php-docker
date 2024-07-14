@@ -21,6 +21,11 @@ RUN apt-get install -y libxslt-dev \
 RUN docker-php-ext-install mysqli pdo_mysql zip bcmath intl
 RUN apt-get install -y uuid-dev && pecl install uuid && docker-php-ext-enable uuid
 RUN docker-php-ext-install exif
+RUN apt-get update && apt-get install -y \
+    libc-client-dev \
+    libkrb5-dev
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
+RUN docker-php-ext-install imap
 
 RUN apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
