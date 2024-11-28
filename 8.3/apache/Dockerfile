@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y \
     libkrb5-dev
 RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
 RUN docker-php-ext-install imap
+RUN docker-php-ext-install redis
 RUN apt-get install -y libinotifytools0-dev && \
     pecl install inotify && \
     docker-php-ext-enable inotify
