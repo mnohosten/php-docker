@@ -61,8 +61,9 @@ RUN a2dismod -f mpm_event mpm_worker >/dev/null 2>&1 || true \
     && chown -R www-data:www-data /var/www/html
 
 # Same as docker-php.conf in the official image: honour .htaccess (front controller rewrites)
-RUN printf '<Directory /var/www/>\n\tOptions -Indexes\n\tAllowOverride All\n</Directory>\nDirectoryIndex index.php index.html\n' > /etc/apache2/conf-available/docker-php.conf \
-    && a2enconf docker-php
+RUN printf '<Directory /var/www/>\n\tOptions -Indexes\n\tAllowOverride All\n</Directory>\nDirectoryIndex disabled\nDirectoryIndex index.php index.html\n' > /etc/apache2/conf-available/docker-php.conf \
+    && a2enconf docker-php \
+    && rm -f /var/www/html/index.html
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
