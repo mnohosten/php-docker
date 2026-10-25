@@ -1,0 +1,15 @@
+#!/bin/bash
+# Same behaviour as apache2-foreground in the official php:*-apache images
+set -Eeuo pipefail
+
+: "${APACHE_CONFDIR:=/etc/apache2}"
+: "${APACHE_ENVVARS:=$APACHE_CONFDIR/envvars}"
+if test -f "$APACHE_ENVVARS"; then
+	. "$APACHE_ENVVARS"
+fi
+
+: "${APACHE_RUN_DIR:=/var/run/apache2}"
+: "${APACHE_PID_FILE:=$APACHE_RUN_DIR/apache2.pid}"
+rm -f "$APACHE_PID_FILE"
+
+exec apache2 -DFOREGROUND "$@"
