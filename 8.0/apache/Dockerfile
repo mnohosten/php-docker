@@ -1,6 +1,8 @@
 # PHP 8.0 is EOL upstream. Since the PHP2Shell disclosure (CVE-2026-109618 / CVE-2026-109619)
 # the only maintained source of security fixes is packages.sury.org, so this image is built on
 # plain Debian + Sury packages instead of the official php:8.0-apache image.
+# NOTE: Debian 12 (glibc 2.36) needs Docker >= 20.10 on the host: Docker 19.03's seccomp profile blocks
+# the clone3 syscall, so exec()/popen()/passthru() fail inside the container.
 FROM debian:bookworm-slim
 
 ARG PHP_VERSION=8.0
@@ -46,8 +48,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         git unzip mc lynx cron \
     && rm -rf /var/lib/apt/lists/*
 
-# Compatibility with the former official image: extra ini files dropped into the old path still work
-RUN mkdir -p /usr/local/etc/php/conf.d
+# Compatibility with the former official image: crontabs and scripts call /usr/local/bin/php,
+# and extra ini files dropped into /usr/local/etc/php/conf.d still work
+RUN mkdir -p /usr/local/etc/php/conf.d && ln -sf /usr/bin/php /usr/local/bin/php
 
 # PHP2Shell defence in depth: upload progress tracking is one of the two exploit paths
 RUN printf 'session.upload_progress.enabled = 0\n' > /usr/local/etc/php/conf.d/99-php2shell-hardening.ini
