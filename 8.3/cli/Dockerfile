@@ -1,4 +1,5 @@
-FROM openswoole/swoole:php8.3
+# openswoole/swoole:php8.3 is frozen at PHP 8.3.6, so build on the official image to follow 8.3.x security releases
+FROM php:8.3-cli-bookworm
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
@@ -11,7 +12,7 @@ RUN apt-get update && \
     apt-get install git -y && \
     apt-get install zip -y && \
     apt-get install libcurl4-openssl-dev -y && \
-    apt-get install libonig-dev -y
+    apt-get install libonig-dev libicu-dev -y
 
 RUN pecl install mongodb \
     &&  echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongo.ini
@@ -26,3 +27,7 @@ RUN apt-get install -y uuid-dev && pecl install uuid && docker-php-ext-enable uu
 RUN docker-php-ext-install exif
 
 RUN apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+# OpenSwoole
+RUN pecl install openswoole \
+    && echo "extension=openswoole.so" > $PHP_INI_DIR/conf.d/openswoole.ini

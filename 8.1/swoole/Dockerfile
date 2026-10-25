@@ -1,4 +1,4 @@
-FROM php:8.1.0-cli
+FROM php:8.1-cli-bookworm
 
 RUN apt-get update && apt-get install vim -y && \
     apt-get install openssl -y && \
@@ -13,7 +13,7 @@ RUN cd /tmp && git clone https://github.com/openswoole/swoole-src.git && \
     cd swoole-src && \
     git checkout v4.11.0 && \
     phpize  && \
-    ./configure --enable-openssl --enable-swoole-curl --enable-http2 --enable-mysqlnd && \
+    CXXFLAGS="-include cstdint" ./configure --enable-openssl --enable-swoole-curl --enable-http2 --enable-mysqlnd && \
     make && make install
 
 RUN touch /usr/local/etc/php/conf.d/openswoole.ini && \

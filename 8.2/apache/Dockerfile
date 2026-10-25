@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.2-apache-bookworm
 
 RUN apt-get update && \
     apt-get install vim -y && \
@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get install git -y && \
     apt-get install zip -y && \
     apt-get install libcurl4-openssl-dev -y && \
-    apt-get install libonig-dev -y
+    apt-get install libonig-dev libicu-dev -y
 
 RUN pecl install mongodb \
     &&  echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongo.ini
